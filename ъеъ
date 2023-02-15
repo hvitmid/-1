@@ -1,0 +1,488 @@
+#include<stdio.h>
+#include<locale.h>
+#include<math.h>
+#include<stdlib.h>
+#define SCREENW 100
+#define SCREENH 50
+typedef double (*myfunc) (double);
+double Y(double);
+double V(double);
+void s_1(myfunc, char, char, int , double, double, double);
+void Otvet(myfunc, double);
+void plot(double, double, myfunc);
+int ishodmassiv(int* A, int);
+int massiv(int* A, int);
+int Gnimsort(int* A, int);
+void put(int* A, int);
+void main()
+{
+	double x, x1, x2, x3, x4, h,n;
+	int i, c,d,d1,d2,c1,c2,c3,d4,d5;
+	char s1, s2;
+	int* A;
+	int size,j;
+	char file[20];
+	FILE* f;
+	srand(time(NULL));
+	setlocale(LC_ALL, "RUS");
+	    while (i=1)
+		{
+		puts("                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		puts("                                  ^  Курсовой проект                ^");
+		puts("                                  ^  Выполнила: Киселева Bиктория   ^");
+		puts("                                  ^  Группа БИСТ-225                ^");
+		puts("                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		
+			puts("                                                                            Выберите какое задание вы хотите выполнить:");
+			puts("                                                                                                                          ____                 ~");
+			puts("                                                                                                                        /   2                 | |x|,     при х>1  ");
+			puts("                                                                   1 - Задание 1: анализ функций  Y(x)=x*arctg(x) - ln\\/ 1+x       и   V(x)= <  1+x,     при х<=-1");
+			puts("                                                                                                                                              | sin(x),  при -1<х<=1");
+			puts("                                                                                                                                               ~");
+
+			puts("                                                                   2 - Задание 2: работа с массивом");
+			puts("                                                                   3 - Выйти");
+			scanf_s("\n%d", &c1);
+			system("cls");
+			switch (c1) 
+			{
+			case 1:
+				puts("                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+				puts("                                  ^  Выполнила: Киселева Bиктория   ^");
+				puts("                                  ^  Группа БИСТ-225                ^");
+				puts("                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     Задание 1");
+				puts("                                                                                          ~~~~~~~~~");
+				puts("                                                                                           Функции:");
+				puts("                                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+				puts("                                                                                             ____");
+				puts("                                                                                            /   2");
+				puts("                                                                                 Y(x)=x*arctg(x) - ln\\/ 1+x  ");
+				puts("                                                                                         ~");
+				puts("                                                                                        | |x|,     при х>1");
+				puts("                                                                                 V(x)= <  1+x,     при х<=-1");
+				puts("                                                                                        | sin(x),  при -1<х<=1");
+				puts("                                                                                         ~");
+				puts("                                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+				puts("                                                                                             Меню");
+				puts("                                                                            Выберите действие и введите нужную цифру:");
+				puts("                                                                                 1 - Найти значение функции F(x)");
+				puts("                                                                                 2 - Вычислить значения функции F(x) на заданном интервале,полуинтервале или отрезке с шагом h");
+				puts("                                                                                 3 - Построить график F(x)");
+				puts("                                                                                 4 - Вернуться назад");
+				scanf_s("%d", &c);
+				switch (c)
+				{
+				case 1:
+					puts("Введите х:");
+					scanf_s("%lf", &x);
+					puts("Значение какой функции вы хотите найти:\n 1 - Y(X)\n 2 - V(x)\n");
+					scanf_s("%d", &d);
+					switch (d) {
+					case 1:
+						printf("Функция Y(x) при x=%.0lf равна ", x);
+						Otvet(Y, x);
+						break;
+					case 2:
+						printf("Функция V(x) при x=%.0lf равна ", x);
+						Otvet(V, x);
+						break;
+					}
+					puts("\nХотите вернуться в главное меню ");
+					puts("1 - Да\n2 - Нет ");
+					scanf("%d", &d5);
+					switch (d5)
+					{
+					case 1:
+						i = 1;
+						break;
+					case 2:
+						i = 2;
+						break;
+					}
+					break;
+				case 2:
+					puts("Выберите: 1 - ввести границы и считать промежуток с файла");
+					puts("          2 - ввести промежуток самостоятельно");
+					scanf_s("%d", &c2);
+					switch (c2) {
+					case 1:
+						f = fopen("КП.txt", "r");
+						fgets(file, 20, f);
+						printf("%s", file);
+						fclose(f);
+						f = fopen("КП.txt", "r");
+						fscanf(f, "%c %lf %lf %c", &s1, &x1, &x2, &s2);
+						fclose(f);
+
+						puts("Введите шаг h:");
+						scanf_s("%lf", &h);
+						puts("Табулирование какой функции вы хотите выполнить:\n 1 - Y(X)\n 2 - V(x)\n");
+						scanf_s("%d", &d1);
+						switch (d1) {
+						case 1:
+							puts("Хотите вывести результат табуляции в виде таблицы или внести значения в фаил");
+							puts(" 1 - в виде таблицы\n 2 - внести в фаил");
+							scanf_s("%d", &d4);
+							switch (d4)
+							{
+							case 1:
+								s_1(Y, s1, s2, h, x1, x2, h);
+								break;
+							case 2:
+								f = fopen("КП.txt", "a");
+								for (double x = x1 + h; x < x2; x += h) {
+									n = Y(x);
+									puts(" ");
+									fprintf(f, "%lf; ", n);
+								}
+								break;
+							}
+							break;
+						case 2:
+							puts("Хотите вывести результат табуляции в виде таблицы или внести значения в фаил");
+							puts(" 1 - в виде таблицы\n 2 - внести в фаил");
+							scanf_s("%d", &d4);
+							switch (d4)
+							{
+							case 1:
+								s_1(V, s1, s2, h, x1, x2, h);
+								break;
+							case 2:
+								f = fopen("КП.txt", "a");
+								for (double x = x1 + h; x < x2; x += h) {
+									n = V(x);
+									puts(" ");
+									fprintf(f, "%lf; ", n);
+								}
+								break;
+							}
+							break;
+						}break;
+					case 2:
+						puts("Введите границы и аргументы через пробел");
+						scanf_s("%c", &s1);
+						scanf_s("%c", &s1);
+						scanf_s("%lf%lf", &x1, &x2);
+						scanf_s("%c", &s2);
+						scanf_s("%c", &s2);
+						puts("Введите шаг h:");
+						scanf_s("%lf", &h);
+						puts("Табулирование какой функции вы хотите выполнить:\n 1 - Y(X)\n 2 - V(x)\n");
+						scanf_s("%d", &d1);
+						switch (d1) {
+						case 1:
+							puts("Хотите вывести результат табуляции в виде таблицы или внести значения в фаил");
+							puts(" 1 - в виде таблицы\n 2 - внести в фаил");
+							scanf_s("%d", &d4);
+							switch (d4)
+							{
+							case 1:
+								s_1(Y, s1, s2, h, x1, x2, h);
+								break;
+							case 2:
+								f = fopen("КП.txt", "a");
+								for (double x = x1 + h; x < x2; x += h) {
+									n = Y(x);
+									puts(" ");
+									fprintf(f, "%lf; ", n);
+								}
+								fclose(f);
+								break;
+							}
+							break;
+						case 2:
+							puts("Хотите вывести результат табуляции в виде таблицы или внести значения в фаил");
+							puts(" 1 - в виде таблицы\n 2 - внести в фаил");
+							scanf_s("%d", &d4);
+							switch (d4)
+							{
+							case 1:
+								s_1(V, s1, s2, h, x1, x2, h);
+								break;
+							case 2:
+								f = fopen("КП.txt", "a");
+								for (double x = x1 + h; x < x2; x += h) {
+									n = V(x);
+									puts(" ");
+									fprintf(f, "%lf; ", n);
+								}
+								fclose(f);
+								break;
+							}
+							break;
+						}
+					}
+					puts("\nХотите вернуться в главное меню ");
+					puts("1 - Да\n2 - Нет ");
+					scanf("%d", &d5);
+					switch (d5)
+					{
+					case 1:
+						i = 1;
+						break;
+					case 2:
+						i = 2;
+						break;
+					}
+					break;
+				case 3:
+					puts("Введите интервал через пробел:");
+					scanf_s("%lf%lf", &x3, &x4);
+					puts("График какой функции вы хотите нарисовать:\n 1 - Y(X)\n 2 - V(x)\n");
+					scanf_s("%d", &d2);
+					switch (d2) {
+					case 1:
+						plot(x3, x4, Y);
+						break;
+					case 2:
+						plot(x3, x4, V);
+						break;
+					}
+					puts("\nХотите вернуться в главное меню ");
+					puts("1 - Да\n2 - Нет ");
+					scanf("%d", &d5);
+					switch (d5)
+					{
+					case 1:
+						i = 1;
+						break;
+					case 2:
+						i = 2;
+						break;
+					}
+					break;
+				case 4:
+					break;
+				}
+				break;
+			case 2:
+				puts("                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+				puts("                                  ^  Выполнила: Киселева Bиктория   ^");
+				puts("                                  ^  Группа БИСТ-225                ^");
+				puts("                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+				puts("      Задание 2");
+				puts("\nХотите продолжить это задание или вернуться в главное меню ");
+				puts("1 - Продолжить\n2 - Вернуться в меню ");
+				scanf("%d", &d5);
+				switch (d5)
+				{
+				case 1:
+					puts("Введите размер массива А[]");
+					scanf_s("%d", &size);
+					A = (int*)malloc(size * sizeof(int));
+					if (A == 0) {
+						puts("error");
+						return -1;
+					}
+					puts("    Исходный массив");
+					ishodmassiv(A, size);
+					put(A, size);
+					puts("Выберите действие с массивом: ");
+					puts(" 1 - сжать массив, оставив в нём только те элементы, сумма цифр которых чётная");
+					puts(" 2 - применить к массиву гномью сортировку");
+					scanf_s("%d", &c3);
+					switch (c3)
+					{
+					case 1:
+						puts("\n Сжатый массив с элементами сумма цифр которых чётная");
+
+						j = massiv(A, size);
+						A = realloc(A, sizeof(int) * j);
+						massiv(A, j);
+						put(A, j);
+						break;
+					case 2:
+						Gnimsort(A, size);
+						put(A, size);
+						break;
+					}
+					free(A);
+					puts("\nХотите вернуться в главное меню ");
+					puts("1 - Да\n2 - Нет ");
+					scanf("%d", &d5);
+					switch (d5)
+					{
+					case 1:
+						i = 1;
+						break;
+					case 2:
+						i = 2;
+						break;
+					}
+					break;
+				case 2:
+					i = 1;
+					break;
+				}
+				break;
+			case 3:
+				i = 2;
+				break;
+			}
+			if (i == 2)break;
+			system("cls");
+		}
+}
+double Y(double x)
+{
+	return x * atan(x) - log(sqrt(1 + pow(x, 2)));
+}
+double V(double x)
+{
+	double a;
+	if (x > 1) a = fabs(x);
+	if (x <= -1) a = 1 + x;
+	if (x > -1 && x <= 1) a = sin(x);
+	return a;
+}
+void s_1(myfunc f, char s1, char s2, int h, double x1, double x2, double n)
+{
+	puts("______________________________________________________");
+	puts("|           x             |            y             |");
+	puts("______________________________________________________");
+	if (s1 == '(' && s2 == ')') {
+		for (double x = x1 + h; x < x2; x += h) {
+			n = f(x);
+			printf("|%15lf          |%15lf           |\n", x, n);
+			puts("______________________________________________________");
+		}
+	}
+
+	if (s1 == '(' && s2 == ']') {
+		for (double x = x1 + h; x <= x2; x += h) {
+			n = f(x);
+			printf("|%15lf          |%15lf           |\n", x, n);
+			puts("______________________________________________________");
+		}
+	}
+
+	if (s1 == '[' && s2 == ']') {
+		for (double x = x1; x <= x2; x += h) {
+			n = f(x);
+			printf("|%15lf          |%15lf           |\n", x, n);
+			puts("______________________________________________________");
+		}
+	}
+
+	if (s1 == '[' && s2 == ')') {
+		for (double x = x1; x < x2; x += h) {
+			n = f(x);
+			printf("|%15lf          |%15lf           |\n", x, n);
+			puts("______________________________________________________");
+		}
+	}
+}
+void plot(double x3, double x4, myfunc f)
+{
+	char screen[SCREENW][SCREENH];
+	double x, y[SCREENW];
+	double ymin = 0, ymax = 0;
+	double hx, hy;
+	int i, j;
+	int xz, yz;
+	hx = (x4 - x3) / (SCREENW - 1);
+	for (i = 0, x = x3; i < SCREENW; ++i, x += hx)
+	{
+		y[i] = f(x);
+		if (y[i] < ymin) ymin = y[i];
+		if (y[i] > ymax) ymax = y[i];
+	}
+	hy = (ymax - ymin) / (SCREENH - 1);
+	yz = (int)floor(ymax / hy + 0.5);
+	xz = (int)floor((0. - x3) / hx + 0.5);
+	for (j = 0; j < SCREENH; ++j)
+		for (i = 0; i < SCREENW; ++i)
+		{
+			if (j == yz && j == xz) screen[i][j] = '+';
+			else if (j == yz) screen[i][j] = '-';
+			else if (i == xz) screen[i][j] = '|';
+			else screen[i][j] = ' ';
+		}
+	for (i = 0; i < SCREENW; ++i)
+	{
+		j = (int)floor((ymax - y[i]) / hy + 0.5);
+		screen[i][j] = '*';
+	}
+	for (j = 0; j < SCREENH; ++j)
+	{
+
+		for (i = 0; i < SCREENW; ++i)
+			putchar(screen[i][j]);
+		putchar('\n');
+	}
+}
+void Otvet(myfunc f, double x)
+{
+	printf("%.2lf\n", f(x));
+}
+int ishodmassiv(int* A, int size)
+{
+	for (int i = 0; i < size; i++) {
+		A[i] = 0 + rand() % 1000;
+	}
+}
+int massiv(int* A, int size)
+{
+	int a,a2,a3,j=0;
+	for (int i = 0; i < size; i++) {
+		if (A[i] < 10) {
+			a = A[i];
+			if (a % 2 == 0) {
+				A[j] = A[i];
+				j++;
+			}
+		}
+		if (A[i] >= 10 && A[i] < 100) {
+			a = (A[i] / 100) % 10;
+			a2 = A[i] % 10;
+			if ((a + a2) % 2 == 0) {
+				A[j] = A[i];
+				j++;
+			}
+		}
+		if (A[i] >= 100 && A[i] < 1000) {
+			a = (A[i] / 100) % 10;
+			a2 = (A[i] % 100) / 10;
+			a3 = A[i] % 10;
+			if ((a + a2 + a3) % 2 == 0) {
+				A[j] = A[i];
+				j++;
+			}
+		}
+	}
+	return j;
+}
+int Gnimsort(int* A, int size)
+{
+	int i = 1;
+	int j = 0;
+	while (i < size)
+	{
+		if (A[i - 1] <= A[i])
+		{
+			i = j;
+			j++;
+		}
+		else
+		{
+			int k = A[i];
+			A[i] = A[i - 1];
+			A[i - 1] = k;
+			i--;
+			if (i == 0)
+			{
+				i = j;
+				j++;
+			}
+		}
+	}
+	return A;
+}
+void put(int* A, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		printf("A[%d]=%d\n", i + 1, A[i]);
+	}
+}
