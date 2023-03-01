@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <locale.h>
+#include <math.h>
+#include <stdlib.h>
+
+double Delta(double, double);
+double otnDelta(double, double);
+
+int main()
+{
+	setlocale(LC_ALL, "RUS");
+
+	printf("ЗАДАНИЕ А\n");
+	double a, b, ad, bd;
+	printf("Какое выражение точнее : 1) 4 / 17 = 0,235 или 2) sqrt(105) = 10,25\n");
+
+	printf("	Значения выражений с большим количеством десятичных знаков :\n");
+	a = 4. / 17.;
+	ad = 0.235;
+
+	b = sqrt(105);
+	bd = 10.25;
+	printf("1) 4/ 17 = %lf\n", a);
+	printf("2) sqrt(105) = %lf\n", b);
+	printf("	Предельные абсолютные погрешности, округляя их с избытком :\n");
+	printf("1) %lf\n", Delta(a, ad));
+	printf("2) %lf\n", Delta(b, bd));
+	printf("Предельные абсолютные погрешности составляют в % :\n");
+	printf("1) %lf\n", otnDelta(a, ad));
+	printf("2) %lf\n", otnDelta(b, bd));
+	printf("\nЗначит, более точное выражение : sqrt(105) = 10,25\n");
+
+
+	printf("ЗАДАНИЕ Б\n");
+	//Округлить сомнительные цифры числа, оставив верные знаки. Определить абсолютную погрешность результата.
+	//1.1341    s=0.12%
+
+
+
+
+
+}
+
+double Delta(double x, double delx)
+{
+	double delta=0;
+	delta = fabs(x - delx);
+	return delta;
+
+}
+double otnDelta(double x, double delx)
+{
+	double res, otndelta;
+	res = Delta(x, delx);
+	otndelta = (res / fabs(delx) * 100);
+	return otndelta;
+}
